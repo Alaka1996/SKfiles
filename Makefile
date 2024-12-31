@@ -38,8 +38,16 @@ $(OBJ_DIR)/test_sensor.o: test_sensor.c
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Run Cppcheck
+lint:
+	cppcheck --enable=all --inconclusive --std=c++17 $(SRC_DIR)/*.c
+
+# Debug build
+debug: CFLAGS += -g -DDEBUG
+debug: clean all
+
 # Clean build artifacts
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all dirs clean
+.PHONY: all dirs clean lint debug
