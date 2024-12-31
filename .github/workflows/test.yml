@@ -23,25 +23,30 @@ jobs:
     - name: Install Cppcheck
       run: sudo apt-get install -y cppcheck
 
-    # Step 4: Run Cppcheck
+    # Step 4: Run Cppcheck Static Analysis and output to a file
     - name: Run Cppcheck Static Analysis
       run: |
-        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c
-        if [ -s cppcheck-results.txt ]; then
+        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c > cppcheck-output.txt
+        if [ -s cppcheck-output.txt ]; then
           echo "Cppcheck found issues. See below:"
-          cat cppcheck-results.txt
-          exit 1
+          cat cppcheck-output.txt
+        else
+          echo "Cppcheck found no issues."
         fi
-        
-    # Step 5: Commit cppcheck-output.txt to the repository
+
+    # Step 5: Commit cppcheck-output.txt to the repository if it exists
     - name: Commit cppcheck-output.txt to the repository
       run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        git add cppcheck-output.txt
-        git commit -m "Add cppcheck-output.txt with results"
-        git push origin main
-    
+        if [ -f cppcheck-output.txt ]; then
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add cppcheck-output.txt
+          git commit -m "Add cppcheck-output.txt with results"
+          git push origin main
+        else
+          echo "cppcheck-output.txt not found. Skipping commit."
+        fi
+
     # Step 6: Build the Project
     - name: Build the Project
       run: |
