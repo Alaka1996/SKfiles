@@ -1,6 +1,7 @@
 # Variables
 CC = gcc
-CFLAGS = -Wall -Iinclude
+CXX = g++
+CFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
@@ -31,23 +32,23 @@ $(OBJ_DIR)/main.o: main.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile test file
-$(OBJ_DIR)/test_sensor.o: test_sensor.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)/test_sensor.o: tests/test_sensor.cpp
+	$(CXX) $(CFLAGS) -Iexternal/googletest/googletest/include -c $< -o $@
 
 # Compile other source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Run the tests (Google Test)
+test: $(BIN_DIR)/test_sensor
+	$(BIN_DIR)/test_sensor
+
 # Run Cppcheck
 lint:
 	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c
-
-# Debug build
-debug: CFLAGS += -g -DDEBUG
-debug: clean all
 
 # Clean build artifacts
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all dirs clean lint debug
+.PHONY: all dirs clean lint debug test
