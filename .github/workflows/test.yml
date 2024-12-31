@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build, Test, and Static Analysis
 
 on:
   push:
@@ -19,25 +19,39 @@ jobs:
     - name: Install GCC and Make
       run: sudo apt-get update && sudo apt-get install -y build-essential
 
-    # Step 3: Build the Project
+    # Step 3: Install Cppcheck
+    - name: Install Cppcheck
+      run: sudo apt-get install -y cppcheck
+
+    # Step 4: Run Cppcheck
+    - name: Run Cppcheck Static Analysis
+      run: |
+        cppcheck --enable=all --inconclusive --std=c++17 . 2> cppcheck-results.txt
+        if [ -s cppcheck-results.txt ]; then
+          echo "Cppcheck found issues. See below:"
+          cat cppcheck-results.txt
+          exit 1
+        fi
+
+    # Step 5: Build the Project
     - name: Build the Project
       run: |
         make clean
         make VERBOSE=1
 
-    # Step 4: Run the Main Program
+    # Step 6: Run the Main Program
     - name: Run Main Program
       run: ./bin/sensor_program > test_output.txt
 
-    # Step 5: Run Unit Tests
+    # Step 7: Run Unit Tests
     - name: Run Unit Tests
       run: ./bin/test_sensor
 
-    # Step 6: Display Output
+    # Step 8: Display Program Output
     - name: Display Program Output
       run: cat test_output.txt
 
-    # Step 7: Check for Warnings
+    # Step 9: Check for Warnings
     - name: Check for Warnings
       run: |
         if grep -q "Warning:" test_output.txt; then
