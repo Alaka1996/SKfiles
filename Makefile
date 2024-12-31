@@ -1,15 +1,18 @@
 # Variables
-CC = gcc
-CFLAGS = -Wall -Iinclude
+CC = g++
+CFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
+TEST_DIR = test
+GTEST_DIR = external/googletest/googletest
 
 # Source files
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 MAIN_OBJ = $(OBJ_DIR)/main.o
 TEST_OBJ = $(OBJ_DIR)/test_sensor.o
+GTEST_OBJ = $(GTEST_DIR)/src/gtest-all.o
 
 # Targets
 all: dirs $(BIN_DIR)/sensor_program $(BIN_DIR)/test_sensor
@@ -22,16 +25,16 @@ dirs:
 $(BIN_DIR)/sensor_program: $(MAIN_OBJ) $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
-# Build the test binary
-$(BIN_DIR)/test_sensor: $(TEST_OBJ) $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+# Build the test binary (Link with Google Test)
+$(BIN_DIR)/test_sensor: $(TEST_OBJ) $(OBJ) $(GTEST_OBJ)
+	$(CC) $(CFLAGS) $^ -lgtest -lgtest_main -pthread -o $@
 
 # Compile main source file
 $(OBJ_DIR)/main.o: main.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile test file
-$(OBJ_DIR)/test_sensor.o: test_sensor.c
+$(OBJ_DIR)/test_sensor.o: test_sensor.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile other source files
