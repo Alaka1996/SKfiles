@@ -4,15 +4,13 @@ CFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
-TEST_DIR = test
-GTEST_DIR = external/googletest/googletest
+TEST_DIR = tests  # Directory for tests
 
 # Source files
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 MAIN_OBJ = $(OBJ_DIR)/main.o
 TEST_OBJ = $(OBJ_DIR)/test_sensor.o
-GTEST_OBJ = $(GTEST_DIR)/src/gtest-all.o
 
 # Targets
 all: dirs $(BIN_DIR)/sensor_program $(BIN_DIR)/test_sensor
@@ -27,31 +25,22 @@ $(BIN_DIR)/sensor_program: $(MAIN_OBJ) $(OBJ)
 
 # Build the test binary
 $(BIN_DIR)/test_sensor: $(OBJ) $(OBJ_DIR)/test_sensor.o
-    $(CC) $(CFLAGS) -Lexternal/googletest/build/lib -lgtest -lgtest_main -pthread $^ -o $@
+	$(CC) $(CFLAGS) -Lexternal/googletest/build/lib -lgtest -lgtest_main -pthread $^ -o $@
 
 # Compile main source file
 $(OBJ_DIR)/main.o: main.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile test file
-$(OBJ_DIR)/test_sensor.o: tests/test_sensor.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-
 # Compile other source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Run Cppcheck
-lint:
-	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c
-
-# Debug build
-debug: CFLAGS += -g -DDEBUG
-debug: clean all
+# Compile test file
+$(OBJ_DIR)/test_sensor.o: $(TEST_DIR)/test_sensor.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean build artifacts
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all dirs clean lint debug
+.PHONY: all dirs clean
