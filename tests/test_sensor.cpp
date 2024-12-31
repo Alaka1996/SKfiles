@@ -1,7 +1,10 @@
 extern "C" {
-    #include "utils.h"
+    #include "utils.h"  // Include the C header for your C function
 }
 
+#include <gtest/gtest.h>  // Include the Google Test header
+
+// Your test case
 TEST(SensorTest, TestCalculateAverage) {
     uint16_t data[] = {10, 20, 30};
     int size = 3;
