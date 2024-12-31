@@ -1,19 +1,14 @@
+// test_sensor.cpp
 #include <gtest/gtest.h>
-#include "sensor.h"  // Include your header files for testing
+#include "utils.h"  // Include the header file for calculate_average
 
-// Example test case
-TEST(SensorTest, TestCalculateAverage) {
-    uint16_t data[] = {1, 2, 3, 4, 5};
+class SensorTest_TestCalculateAverage_Test : public ::testing::Test {
+protected:
+    uint16_t data[5] = {10, 20, 30, 40, 50};
     int size = 5;
-    int expected_average = 3;
+};
 
+TEST_F(SensorTest_TestCalculateAverage_Test, TestCalculateAverage) {
     int result = calculate_average(data, size);
-
-    EXPECT_EQ(result, expected_average);
-}
-
-// main function to run all the tests
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    EXPECT_EQ(result, 30);  // Assuming the average of the data is 30
 }
