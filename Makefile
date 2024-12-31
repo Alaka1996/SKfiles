@@ -1,10 +1,9 @@
 # Variables
-CC = g++
-CFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
+CC = gcc
+CFLAGS = -Wall -Iinclude
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
-TEST_DIR = tests  # Directory for tests
 
 # Source files
 SRC = $(wildcard $(SRC_DIR)/*.c)
@@ -24,23 +23,31 @@ $(BIN_DIR)/sensor_program: $(MAIN_OBJ) $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
 # Build the test binary
-$(BIN_DIR)/test_sensor: $(OBJ) $(OBJ_DIR)/test_sensor.o
-	$(CC) $(CFLAGS) -Lexternal/googletest/build/lib -lgtest -lgtest_main -pthread $^ -o $@
+$(BIN_DIR)/test_sensor: $(TEST_OBJ) $(OBJ)
+	$(CC) $(CFLAGS) $^ -o $@
 
 # Compile main source file
 $(OBJ_DIR)/main.o: main.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile test file
+$(OBJ_DIR)/test_sensor.o: test_sensor.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile other source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile test file
-$(OBJ_DIR)/test_sensor.o: $(TEST_DIR)/test_sensor.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+# Run Cppcheck
+lint:
+	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c
+
+# Debug build
+debug: CFLAGS += -g -DDEBUG
+debug: clean all
 
 # Clean build artifacts
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all dirs clean
+.PHONY: all dirs clean lint debug
