@@ -12,6 +12,10 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 MAIN_OBJ = $(OBJ_DIR)/main.o
 TEST_OBJ = $(OBJ_DIR)/test_sensor.o
 
+# Google Test flags
+CXXFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
+LDFLAGS = -Lexternal/googletest/googletest/lib -lgtest -lgtest_main -pthread
+
 # Targets
 all: dirs $(BIN_DIR)/sensor_program $(BIN_DIR)/test_sensor
 
@@ -25,7 +29,7 @@ $(BIN_DIR)/sensor_program: $(MAIN_OBJ) $(OBJ)
 
 # Build the test binary
 $(BIN_DIR)/test_sensor: $(TEST_OBJ) $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(OBJ) $(OBJ_DIR)/test_sensor.o $(LDFLAGS) -o $(BIN_DIR)/test_sensor
 
 # Compile main source file
 $(OBJ_DIR)/main.o: main.c
@@ -33,7 +37,7 @@ $(OBJ_DIR)/main.o: main.c
 
 # Compile test file
 $(OBJ_DIR)/test_sensor.o: tests/test_sensor.cpp
-	$(CXX) $(CFLAGS) -Iexternal/googletest/googletest/include -c $< -o $@
+	$(CXX) $(CXXFLAGS) -Iexternal/googletest/googletest/include -c $< -o $@
 
 # Compile other source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
