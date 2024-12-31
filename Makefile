@@ -25,9 +25,9 @@ dirs:
 $(BIN_DIR)/sensor_program: $(MAIN_OBJ) $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
-# Build the test binary (Link with Google Test)
-$(BIN_DIR)/test_sensor: $(TEST_OBJ) $(OBJ) $(GTEST_OBJ)
-	$(CC) $(CFLAGS) $^ -lgtest -lgtest_main -pthread -o $@
+# Build the test binary
+$(BIN_DIR)/test_sensor: $(OBJ) $(OBJ_DIR)/test_sensor.o
+    $(CC) $(CFLAGS) -Lexternal/googletest/build/lib -lgtest -lgtest_main -pthread $^ -o $@
 
 # Compile main source file
 $(OBJ_DIR)/main.o: main.c
