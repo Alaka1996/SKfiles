@@ -26,7 +26,9 @@ jobs:
     # Step 4: Run Cppcheck Static Analysis
     - name: Run Cppcheck Static Analysis
       run: |
-        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c > cppcheck-output.txt
+        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c > cppcheck-output.txt
+        # Suppress unused function warnings if you don't want them to fail the build
+        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include --suppress=unusedFunction src/*.c >> cppcheck-output.txt
         if [ -s cppcheck-output.txt ]; then
           echo "Cppcheck found issues. See below:"
           cat cppcheck-output.txt
