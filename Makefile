@@ -40,7 +40,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 # Run Cppcheck
 lint:
-	cppcheck --enable=all --inconclusive --std=c++17 $(SRC_DIR)/*.c
+	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c
 
 # Debug build
 debug: CFLAGS += -g -DDEBUG
