@@ -23,35 +23,44 @@ jobs:
     - name: Install Cppcheck
       run: sudo apt-get install -y cppcheck
 
-    # Step 4: Run Cppcheck
+    # Step 4: Run Cppcheck Static Analysis
     - name: Run Cppcheck Static Analysis
       run: |
-        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c
-        if [ -s cppcheck-results.txt ]; then
+        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c > cppcheck-output.txt
+        if [ -s cppcheck-output.txt ]; then
           echo "Cppcheck found issues. See below:"
-          cat cppcheck-results.txt
+          cat cppcheck-output.txt
           exit 1
+        else
+          echo "Cppcheck found no issues."
         fi
 
-    # Step 5: Build the Project
+    # Step 5: Upload cppcheck-output.txt as an artifact
+    - name: Upload cppcheck-output.txt as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: cppcheck-output
+        path: cppcheck-output.txt
+
+    # Step 6: Build the Project
     - name: Build the Project
       run: |
         make clean
         make VERBOSE=1
 
-    # Step 6: Run the Main Program
+    # Step 7: Run the Main Program
     - name: Run Main Program
       run: ./bin/sensor_program > test_output.txt
 
-    # Step 7: Run Unit Tests
+    # Step 8: Run Unit Tests
     - name: Run Unit Tests
       run: ./bin/test_sensor
 
-    # Step 8: Display Program Output
+    # Step 9: Display Program Output
     - name: Display Program Output
       run: cat test_output.txt
 
-    # Step 9: Check for Warnings
+    # Step 10: Check for Warnings
     - name: Check for Warnings
       run: |
         if grep -q "Warning:" test_output.txt; then
