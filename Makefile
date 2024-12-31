@@ -34,8 +34,9 @@ $(OBJ_DIR)/main.o: main.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Compile test file
-$(OBJ_DIR)/test_sensor.o: test_sensor.cpp
+$(OBJ_DIR)/test_sensor.o: tests/test_sensor.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
+
 
 # Compile other source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
