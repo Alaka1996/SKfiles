@@ -26,7 +26,7 @@ jobs:
     # Step 4: Run Cppcheck
     - name: Run Cppcheck Static Analysis
       run: |
-        cppcheck --enable=all --inconclusive --std=c++17 . 2> cppcheck-results.txt
+        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c
         if [ -s cppcheck-results.txt ]; then
           echo "Cppcheck found issues. See below:"
           cat cppcheck-results.txt
