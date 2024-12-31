@@ -1,6 +1,9 @@
 #include <stdint.h>
 
-int calculate_average(uint16_t *data, int size) {
+int calculate_average(const uint16_t *data, int size) {
+    // Function implementation
+}
+ {
     if (size <= 0) {
         return -1; // Error: Invalid size
     }
