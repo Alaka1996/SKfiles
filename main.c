@@ -14,14 +14,7 @@ void process_data(uint16_t *data);
 // cppcheck-suppress unusedFunction
 void print_data(uint16_t *data, int size);
 
-int main() {
-    unsigned short data[] = {100, 200, 300, 400, 500};
-    int size = sizeof(data) / sizeof(data[0]);
-    process_data(data, size);
-    return 0;
-}
-
-{  
+int main() {  
     // Allocate memory for sensor data
     uint16_t *sensor_data = (uint16_t *)malloc(BUFFER_SIZE * sizeof(uint16_t));
     if (!sensor_data) {
