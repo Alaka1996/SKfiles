@@ -15,9 +15,7 @@ void process_data(unsigned short *data) {
     int size = 10; // Example size
     int avg = calculate_average(data, size);
     printf("Average: %d\n", avg);
-}
 
-    
     if(avg > 512) {
         printf("Warning: Sensor value exceeds threshold!\n");
     } else {
