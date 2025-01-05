@@ -11,8 +11,8 @@ void read_sensor_data(uint16_t *data) {
     }
 }
 
-void process_data(unsigned short *data, int size) {
-    int average = calculate_average(data, size);
+void process_data(unsigned short *data) {
+    int average = calculate_average(data, BUFFER_SIZE);
     printf("Calculated Average: %d\n", average);
 
     if(avg > 512) {
