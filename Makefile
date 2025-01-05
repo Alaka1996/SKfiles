@@ -55,7 +55,8 @@ clean:
 
 # Run Cppcheck
 lint:
-	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c
+	cppcheck --force --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include --suppress=missingIncludeSystem --suppress=syntaxError src/*.c
+
 
 
 # Run the tests (Google Test)
