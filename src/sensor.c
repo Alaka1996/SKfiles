@@ -12,7 +12,7 @@ void read_sensor_data(uint16_t *data) {
 }
 
 void process_data(unsigned short *data) {
-    int avg = calculate_average(data, size);
+    int avg = calculate_average(data,BUFFER_SIZE);
     printf("Average: %d\n", avg);
 
     if(avg > 512) {
