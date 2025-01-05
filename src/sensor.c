@@ -15,7 +15,7 @@ void process_data(unsigned short *data) {
     int average = calculate_average(data, BUFFER_SIZE);
     printf("Calculated Average: %d\n", average);
 
-    if(avg > 512) {
+    if(average > 512) {
         printf("Warning: Sensor value exceeds threshold!\n");
     } else {
         printf("Sensor value is within safe range.\n");
