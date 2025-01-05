@@ -11,9 +11,12 @@ void read_sensor_data(uint16_t *data) {
     }
 }
 
-void process_data(uint16_t *data) {
-    int avg = calculate_average(data, BUFFER_SIZE);
-    printf("Average sensor value: %d\n", avg);
+void process_data(unsigned short *data) {
+    int size = 10; // Example size
+    int avg = calculate_average(data, size);
+    printf("Average: %d\n", avg);
+}
+
     
     if(avg > 512) {
         printf("Warning: Sensor value exceeds threshold!\n");
