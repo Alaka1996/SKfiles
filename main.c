@@ -4,6 +4,7 @@
 
 #define BUFFER_SIZE 10 // Define if not included elsewhere
 
+// cppcheck-suppress unusedFunction
 // Declare external functions
 void read_sensor_data(uint16_t *data);
 void process_data(uint16_t *data);
