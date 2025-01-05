@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include "utils.h"  // Assuming you have a header file for utils
 #include "sensor.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 int calculate_average(const uint16_t *data, int size) {
     
