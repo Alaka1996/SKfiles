@@ -23,40 +23,35 @@ jobs:
     - name: Install Cppcheck
       run: sudo apt-get install -y cppcheck
 
-    # Step 4: Install Google Test (If you're not using the submodule method)
-    - name: Install Google Test
-      run: |
-        sudo apt-get install -y cmake g++ wget
-        git clone https://github.com/google/googletest.git external/googletest
-        cd external/googletest
-        cmake .
-        sudo make install
-
-    # Step 5: Run Cppcheck Static Analysis
+    # Step 4: Run Cppcheck
     - name: Run Cppcheck Static Analysis
       run: |
-        make lint
+        cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c
+        if [ -s cppcheck-results.txt ]; then
+          echo "Cppcheck found issues. See below:"
+          cat cppcheck-results.txt
+          exit 1
+        fi
 
-    # Step 6: Build the Project
+    # Step 5: Build the Project
     - name: Build the Project
       run: |
         make clean
         make VERBOSE=1
 
-    # Step 7: Run Unit Tests
-    - name: Run Unit Tests
-      run: |
-        make test
-
-    # Step 8: Run the Main Program
+    # Step 6: Run the Main Program
     - name: Run Main Program
       run: ./bin/sensor_program > test_output.txt
 
-    # Step 9: Display Program Output
+    # Step 7: Run Unit Tests
+    - name: Run Unit Tests
+      run: ./bin/test_sensor
+
+    # Step 8: Display Program Output
     - name: Display Program Output
       run: cat test_output.txt
 
-    # Step 10: Check for Warnings
+    # Step 9: Check for Warnings
     - name: Check for Warnings
       run: |
         if grep -q "Warning:" test_output.txt; then
