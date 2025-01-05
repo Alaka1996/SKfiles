@@ -17,4 +17,5 @@ int main() {
     test_average_basic();
     // other tests...
     return 0;
+}
 
