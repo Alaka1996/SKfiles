@@ -1,7 +1,7 @@
 # Variables
 CC = gcc
 CXX = g++
-CFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
+CFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include -Wno-unused-function
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
@@ -15,7 +15,7 @@ SENSOR_OBJ = $(OBJ_DIR)/sensor.o
 TEST_OBJ = $(OBJ_DIR)/test_sensor.o
 
 # Google Test flags
-CXXFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include
+CXXFLAGS = -Wall -Iinclude -Iexternal/googletest/googletest/include -Wno-unused-function
 LDFLAGS = -Lexternal/googletest/googletest/lib -lgtest -lgtest_main -pthread
 
 # Targets
@@ -56,8 +56,6 @@ clean:
 # Run Cppcheck
 lint:
 	cppcheck --force --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include --suppress=missingIncludeSystem --suppress=syntaxError src/*.c
-
-
 
 # Run the tests (Google Test)
 test: $(BIN_DIR)/test_sensor
