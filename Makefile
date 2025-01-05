@@ -55,7 +55,8 @@ clean:
 
 # Run Cppcheck
 lint:
-	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude src/*.c
+	cppcheck --enable=all --inconclusive --std=c++17 -Iinclude -I/usr/include src/*.c
+
 
 # Run the tests (Google Test)
 test: $(BIN_DIR)/test_sensor
