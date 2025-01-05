@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "utils.h"  
+#include "utils.c"
 
 void test_average_basic() {
     uint16_t data[] = {100, 200, 300, 400, 500};
