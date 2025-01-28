@@ -16,7 +16,7 @@ void print_data(uint16_t *data, int size);
 
 int main() {  
     // Allocate memory for sensor data
-    uint16_t *sensor_data = (uint16_t *)malloc(BUFFER_SIZE * sizeof(uint16_t));
+    uint16_t *sensor_data = (uint16_t *)malloc(BUFFER_SIZE);
     if (!sensor_data) {
         printf("Memory allocation failed!\n");
         return 1; // Exit with an error code
